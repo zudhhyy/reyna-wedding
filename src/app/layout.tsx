@@ -3,7 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Wasiq & Reyna's Wedding",
+  title: "Reyna & Wasiq's Wedding",
   description: 'October 26, 2025 — Join us in celebration!',
 };
 
@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* FOOTER */}
         <footer className="text-center py-6 text-xs font-lucy text-secondary">
-          © {new Date().getFullYear()} Wasiq & Reyna — All rights reserved
+          © {new Date().getFullYear()} Reyna & Wasiq — All rights reserved
         </footer>
       </body>
     </html>

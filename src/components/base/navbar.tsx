@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <header className="w-full px-6 py-4 sticky top-0 z-50 bg-background">
       <nav className="max-w-5xl mx-auto flex justify-between items-center">
-        <div className="text-2xl font-honeymoon text-primary">Wasiq & Reyna</div>
+        <div className="text-2xl font-honeymoon text-primary">Reyna & Wasiq</div>
 
         {/* Desktop Nav */}
         <ul className="hidden md:flex gap-5 text-sm font-lucy">

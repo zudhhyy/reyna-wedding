@@ -17,7 +17,7 @@ export default function Home() {
       <div className="text-center max-w-2xl space-y-6 flex flex-col items-center">
         <Image src={LogoImg} alt="Logo" width={300} height={300} />
 
-        <h1 className="text-5xl md:text-6xl font-honeymoon-bold text-primary">Wasiq & Reyna&apos;s Reception</h1>
+        <h1 className="text-5xl md:text-6xl font-honeymoon-bold text-primary">Reyna & Wasiq&apos;s Reception</h1>
 
         <p className="text-base md:text-xl text-primary">
           Come celebrate in the International Ballroom

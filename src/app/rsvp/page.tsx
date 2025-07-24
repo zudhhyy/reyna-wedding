@@ -39,7 +39,7 @@ export default function RSVPPage() {
           <p className="mt-12 text-secondary font-semibold text-base">
             With all our love,
             <br />
-            Wasiq & Reyna
+            Reyna & Wasiq
           </p>
 
           <Button className="mx-auto mt-[20%]">
