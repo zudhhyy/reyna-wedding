@@ -1,26 +1,109 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Lucy Rose PERSONAL';
+  src: url('/fonts/LucyRosePERSONAL-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Honeymoon PERSONAL';
+  src: url('/fonts/Honeymoon_PERSONAL.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Honeymoon Bold PERSONAL';
+  src: url('/fonts/HoneymoonBold_PERSONAL.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fef7f1;
+  --foreground: #b89767;
+  --primary: #b89767;
+  --secondary: #8c6b4d;
+  --tertiary: #d4b0a2;
+  --quaternary: #b5bfa1;
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-quaternary: var(--quaternary);
+
+  --font-honeymoon: 'Honeymoon PERSONAL';
+  --font-honeymoon-bold: 'Honeymoon Bold PERSONAL';
+  --font-lucy-rose: 'Lucy Rose PERSONAL';
+
+  --animation-fade-in: fadeIn 0.8s ease-in-out;
+  --animation-bounce-in: bounceIn 0.8s ease-out;
+  --animation-shimmer: shimmer 2s infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(50px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-10px);
+  }
+  70% {
+    transform: scale(0.9) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Lucy Rose PERSONAL';
+}
+
+.animate-fade-in {
+  animation: var(--animation-fade-in);
+}
+
+.animate-bounce-in {
+  animation: var(--animation-bounce-in);
+}
+
+.animate-shimmer {
+  animation: var(--animation-shimmer);
+}
+
+section {
+  min-height: calc(100vh - 130px);
 }
