@@ -40,7 +40,7 @@ export default function AboutPage() {
         </p>
 
         <Button className="mt-[25%]">
-          <Link href="/attire">Join the Celebration</Link>
+          <Link href="/attire">Continue</Link>
         </Button>
       </div>
     </section>

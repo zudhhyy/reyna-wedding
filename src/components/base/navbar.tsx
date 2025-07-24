@@ -13,19 +13,7 @@ const Navbar = () => {
       <nav className="max-w-5xl mx-auto flex justify-between items-center">
         <div className="text-2xl font-honeymoon text-primary">Reyna & Wasiq</div>
 
-        {/* Desktop Nav */}
-        <ul className="hidden md:flex gap-5 text-sm font-lucy">
-          {navLinks.map(({ href, label }) => (
-            <li key={href}>
-              <Link href={href} className="hover:text-secondary transition">
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        {/* Mobile Toggle Button */}
-        <button onClick={toggleMenu} className="md:hidden">
+        <button onClick={toggleMenu}>
           <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             {isOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -36,23 +24,16 @@ const Navbar = () => {
         </button>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <div 
-        className={`md:hidden absolute top-full left-0 right-0 bg-background/90 shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen 
-            ? 'max-h-96 opacity-100 translate-y-0' 
-            : 'max-h-0 opacity-0 -translate-y-4'
+      <div
+        className={`absolute top-full left-0 right-0 bg-background/90 shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? 'max-h-96 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-4'
         }`}
       >
         <div className="px-6 pb-6">
           <ul className="flex flex-col gap-4 text-base font-lucy pt-4">
             {navLinks.map(({ href, label }) => (
               <li key={href}>
-                <Link 
-                  href={href} 
-                  className="block hover:text-secondary transition-colors duration-200" 
-                  onClick={() => setIsOpen(false)}
-                >
+                <Link href={href} className="block hover:text-secondary transition-colors duration-200" onClick={() => setIsOpen(false)}>
                   {label}
                 </Link>
               </li>
