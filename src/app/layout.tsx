@@ -5,6 +5,35 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: "Reyna & Wasiq's Wedding",
   description: 'October 26, 2025 — Join us in celebration!',
+  keywords: 'wedding, Reyna, Wasiq, celebration, October 26, 2025',
+  authors: [{ name: 'Reyna & Wasiq' }],
+  creator: 'Reyna & Wasiq',
+  openGraph: {
+    title: "Reyna & Wasiq's Wedding",
+    description: 'October 26, 2025 — Join us in celebration!',
+    url: 'https://reynawasiqsaeed.com/',
+    siteName: "Reyna & Wasiq's Wedding",
+    images: [
+      {
+        url: '/logo-social.png',
+        width: 1200,
+        height: 630,
+        alt: 'Reyna & Wasiq Wedding Logo',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Reyna & Wasiq's Wedding",
+    description: 'October 26, 2025 — Join us in celebration!',
+    images: ['/logo-social.png'],
+  },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
