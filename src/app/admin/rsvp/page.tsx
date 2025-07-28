@@ -14,6 +14,8 @@ interface RSVPSubmission {
 export default function AdminRSVPPage() {
   const [submissions, setSubmissions] = useState<RSVPSubmission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [submissionToDelete, setSubmissionToDelete] = useState<RSVPSubmission | null>(null);
 
   useEffect(() => {
     fetchSubmissions();
@@ -40,6 +42,37 @@ export default function AdminRSVPPage() {
       case 'maybe': return 'text-yellow-600';
       default: return 'text-gray-600';
     }
+  };
+
+  const handleDeleteClick = (submission: RSVPSubmission) => {
+    setSubmissionToDelete(submission);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!submissionToDelete) return;
+
+    try {
+      const response = await fetch(`/api/rsvp/${submissionToDelete.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Remove from local state
+        setSubmissions(prev => prev.filter(sub => sub.id !== submissionToDelete.id));
+        setShowDeleteModal(false);
+        setSubmissionToDelete(null);
+      } else {
+        console.error('Failed to delete submission');
+      }
+    } catch (error) {
+      console.error('Error deleting submission:', error);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setSubmissionToDelete(null);
   };
 
   if (loading) {
@@ -79,10 +112,18 @@ export default function AdminRSVPPage() {
                     {new Date(submission.timestamp).toLocaleString()}
                   </p>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${getAttendanceColor(submission.attendance)}`}>
-                  {submission.attendance === 'yes' ? 'Attending' : 
-                   submission.attendance === 'no' ? 'Not Attending' : 'Maybe'}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getAttendanceColor(submission.attendance)}`}>
+                    {submission.attendance === 'yes' ? 'Attending' : 
+                     submission.attendance === 'no' ? 'Not Attending' : 'Maybe'}
+                  </span>
+                  <button
+                    onClick={() => handleDeleteClick(submission)}
+                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
               
               <div className="space-y-2">
@@ -100,6 +141,34 @@ export default function AdminRSVPPage() {
           ))
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && submissionToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-background border border-tertiary rounded-lg p-6 max-w-md mx-4">
+            <h3 className="text-xl font-semibold text-foreground mb-4">Confirm Delete</h3>
+            <p className="text-secondary mb-6">
+              Are you sure you want to delete the RSVP from <span className="font-semibold">{submissionToDelete.name}</span>?
+              <br />
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={handleDeleteCancel}
+                className="px-4 py-2 border border-tertiary rounded hover:bg-tertiary/20 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

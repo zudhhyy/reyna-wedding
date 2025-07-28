@@ -2,7 +2,16 @@
 
 import Button from '@/components/base/button';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+interface RSVPSubmission {
+  id: string;
+  name: string;
+  attendance: string;
+  phone: string;
+  message: string;
+  timestamp: string;
+}
 
 export default function RSVPPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -13,6 +22,8 @@ export default function RSVPPage() {
     phone: '',
     message: ''
   });
+  const [allSubmissions, setAllSubmissions] = useState<RSVPSubmission[]>([]);
+  const [loadingSubmissions, setLoadingSubmissions] = useState(true);
 
   const handleNext = () => {
     setIsAnimating(true);
@@ -35,6 +46,7 @@ export default function RSVPPage() {
       });
 
       if (response.ok) {
+        await refreshSubmissions(); // Refresh the messages table
         handleNext();
       } else {
         console.error('Failed to submit RSVP');
@@ -52,6 +64,38 @@ export default function RSVPPage() {
       ...prev,
       [name]: value
     }));
+  };
+
+  // Fetch all submissions to display messages
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        const response = await fetch('/api/rsvp');
+        if (response.ok) {
+          const data = await response.json();
+          setAllSubmissions(data.submissions || []);
+        }
+      } catch (error) {
+        console.error('Error fetching submissions:', error);
+      } finally {
+        setLoadingSubmissions(false);
+      }
+    };
+
+    fetchSubmissions();
+  }, []);
+
+  // Refresh submissions after successful submission
+  const refreshSubmissions = async () => {
+    try {
+      const response = await fetch('/api/rsvp');
+      if (response.ok) {
+        const data = await response.json();
+        setAllSubmissions(data.submissions || []);
+      }
+    } catch (error) {
+      console.error('Error refreshing submissions:', error);
+    }
   };
 
   return (
@@ -156,6 +200,51 @@ export default function RSVPPage() {
               {isAnimating ? 'Sending...' : 'Send RSVP'}
             </Button>
           </form>
+
+          {/* Messages from other guests */}
+          <div className="mt-16">
+            <h2 className="text-3xl font-honeymoon text-primary text-center mb-8">Messages from Our Guests</h2>
+            
+            {loadingSubmissions ? (
+              <div className="text-center py-8">
+                <p className="text-secondary">Loading messages...</p>
+              </div>
+            ) : allSubmissions.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-secondary">Be the first to leave a message! 💕</p>
+              </div>
+            ) : (
+              <div className="space-y-4 max-h-96 overflow-y-auto">
+                {allSubmissions
+                  .filter(submission => submission.message && submission.message.trim() !== '')
+                  .map((submission) => (
+                    <div key={submission.id} className="bg-background border border-tertiary rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="font-semibold text-foreground">{submission.name}</h3>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          submission.attendance === 'yes' ? 'bg-green-100 text-green-700' :
+                          submission.attendance === 'no' ? 'bg-red-100 text-red-700' :
+                          'bg-yellow-100 text-yellow-700'
+                        }`}>
+                          {submission.attendance === 'yes' ? 'Attending' : 
+                           submission.attendance === 'no' ? 'Not Attending' : 'Maybe'}
+                        </span>
+                      </div>
+                      <p className="text-secondary text-sm mb-2">
+                        {new Date(submission.timestamp).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                      <p className="text-foreground leading-relaxed">{submission.message}</p>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </section>

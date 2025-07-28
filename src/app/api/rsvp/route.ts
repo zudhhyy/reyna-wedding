@@ -1,5 +1,14 @@
-import { kv } from '@vercel/kv';
 import { NextRequest, NextResponse } from 'next/server';
+
+// In-memory storage for local development
+export const localStorage: Array<{
+  id: string;
+  name: string;
+  attendance: string;
+  phone: string;
+  message: string;
+  timestamp: string;
+}> = [];
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,8 +33,15 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     };
 
-    // Store in Vercel KV
-    await kv.lpush('rsvp-submissions', JSON.stringify(rsvpEntry));
+    // Try to use Vercel KV if available, otherwise use local storage
+    try {
+      const { kv } = await import('@vercel/kv');
+      await kv.lpush('rsvp-submissions', JSON.stringify(rsvpEntry));
+    } catch (error) {
+      // Fallback to local storage for development
+      console.log('Vercel KV not available, using local storage');
+      localStorage.push(rsvpEntry);
+    }
 
     return NextResponse.json({ success: true, data: rsvpEntry });
   } catch (error) {
@@ -39,11 +55,17 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    // Retrieve all RSVP submissions
-    const submissions = await kv.lrange('rsvp-submissions', 0, -1);
-    const parsedSubmissions = submissions.map(sub => JSON.parse(sub));
-    
-    return NextResponse.json({ submissions: parsedSubmissions });
+    // Try to use Vercel KV if available, otherwise use local storage
+    try {
+      const { kv } = await import('@vercel/kv');
+      const submissions = await kv.lrange('rsvp-submissions', 0, -1);
+      const parsedSubmissions = submissions.map((sub: string) => JSON.parse(sub));
+      return NextResponse.json({ submissions: parsedSubmissions });
+    } catch (error) {
+      // Fallback to local storage for development
+      console.log('Vercel KV not available, using local storage');
+      return NextResponse.json({ submissions: localStorage });
+    }
   } catch (error) {
     console.error('Error fetching RSVP submissions:', error);
     return NextResponse.json(
