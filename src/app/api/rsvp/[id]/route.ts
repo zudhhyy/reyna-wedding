@@ -30,7 +30,7 @@ export async function DELETE(
       return NextResponse.json({ success: true });
     } catch (error) {
       // Fallback to local storage for development
-      console.log('Vercel KV not available, using local storage');
+      console.log('Vercel KV not available, using local storage', error);
       
       // Remove from local storage
       const index = localStorage.findIndex(sub => sub.id === id);

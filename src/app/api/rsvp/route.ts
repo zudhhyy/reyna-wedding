@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       await kv.lpush('rsvp-submissions', JSON.stringify(rsvpEntry));
     } catch (error) {
       // Fallback to local storage for development
-      console.log('Vercel KV not available, using local storage');
+      console.log('Vercel KV not available, using local storage', error);
       localStorage.push(rsvpEntry);
     }
 
@@ -63,7 +63,7 @@ export async function GET() {
       return NextResponse.json({ submissions: parsedSubmissions });
     } catch (error) {
       // Fallback to local storage for development
-      console.log('Vercel KV not available, using local storage');
+      console.log('Vercel KV not available, using local storage', error);
       return NextResponse.json({ submissions: localStorage });
     }
   } catch (error) {
