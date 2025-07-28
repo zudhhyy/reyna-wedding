@@ -56,5 +56,4 @@ const navLinks = [
   { href: '/registry', label: 'Registry' },
   { href: '/location', label: 'Location' },
   { href: '/rsvp', label: 'RSVP' },
-  { href: '/thankyou', label: 'Thank You' },
 ];
