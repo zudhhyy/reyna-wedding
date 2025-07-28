@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { localStorage } from '../route';
+import { localStorage } from '@/lib/storage';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Try to use Vercel KV if available, otherwise use local storage
     try {

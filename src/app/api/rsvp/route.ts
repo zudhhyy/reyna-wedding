@@ -1,14 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// In-memory storage for local development
-export const localStorage: Array<{
-  id: string;
-  name: string;
-  attendance: string;
-  phone: string;
-  message: string;
-  timestamp: string;
-}> = [];
+import { localStorage } from '@/lib/storage';
 
 export async function POST(request: NextRequest) {
   try {
