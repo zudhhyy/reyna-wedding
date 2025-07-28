@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { addRSVP, getRSVPs } from '@/lib/firebase';
 import { localStorage } from '@/lib/storage';
 
 export async function POST(request: NextRequest) {
@@ -24,14 +25,40 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     };
 
-    // Try to use Vercel KV if available, otherwise use local storage
+    // Try to use Firebase if available, otherwise use local storage
     try {
-      const { kv } = await import('@vercel/kv');
-      await kv.lpush('rsvp-submissions', JSON.stringify(rsvpEntry));
+      const result = await addRSVP({
+        name,
+        attendance,
+        phone,
+        message: message || ''
+      });
+      
+      const rsvpEntry = {
+        id: result.id,
+        name,
+        attendance,
+        phone,
+        message: message || '',
+        timestamp: new Date().toISOString(),
+      };
+
+      return NextResponse.json({ success: true, data: rsvpEntry });
     } catch (error) {
       // Fallback to local storage for development
-      console.log('Vercel KV not available, using local storage', error);
+      console.log('Firebase not available, using local storage');
+      
+      const rsvpEntry = {
+        id: Date.now().toString(),
+        name,
+        attendance,
+        phone,
+        message: message || '',
+        timestamp: new Date().toISOString(),
+      };
+      
       localStorage.push(rsvpEntry);
+      return NextResponse.json({ success: true, data: rsvpEntry });
     }
 
     return NextResponse.json({ success: true, data: rsvpEntry });
@@ -46,15 +73,13 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    // Try to use Vercel KV if available, otherwise use local storage
+    // Try to use Firebase if available, otherwise use local storage
     try {
-      const { kv } = await import('@vercel/kv');
-      const submissions = await kv.lrange('rsvp-submissions', 0, -1);
-      const parsedSubmissions = submissions.map((sub: string) => JSON.parse(sub));
-      return NextResponse.json({ submissions: parsedSubmissions });
+      const submissions = await getRSVPs();
+      return NextResponse.json({ submissions });
     } catch (error) {
       // Fallback to local storage for development
-      console.log('Vercel KV not available, using local storage', error);
+      console.log('Firebase not available, using local storage');
       return NextResponse.json({ submissions: localStorage });
     }
   } catch (error) {

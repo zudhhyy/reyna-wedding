@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { deleteRSVP } from '@/lib/firebase';
 import { localStorage } from '@/lib/storage';
 
 export async function DELETE(
@@ -8,29 +9,13 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    // Try to use Vercel KV if available, otherwise use local storage
+    // Try to use Firebase if available, otherwise use local storage
     try {
-      const { kv } = await import('@vercel/kv');
-      
-      // Get all submissions
-      const submissions = await kv.lrange('rsvp-submissions', 0, -1);
-      
-      // Filter out the submission to delete
-      const filteredSubmissions = submissions.filter((sub: string) => {
-        const submission = JSON.parse(sub);
-        return submission.id !== id;
-      });
-
-      // Clear the list and re-add filtered submissions
-      await kv.del('rsvp-submissions');
-      if (filteredSubmissions.length > 0) {
-        await kv.lpush('rsvp-submissions', ...filteredSubmissions);
-      }
-
+      await deleteRSVP(id);
       return NextResponse.json({ success: true });
     } catch (error) {
       // Fallback to local storage for development
-      console.log('Vercel KV not available, using local storage', error);
+      console.log('Firebase not available, using local storage');
       
       // Remove from local storage
       const index = localStorage.findIndex(sub => sub.id === id);
