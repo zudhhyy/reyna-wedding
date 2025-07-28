@@ -148,13 +148,13 @@ export default function RSVPPage() {
               ></textarea>
             </div>
 
-            <button
+            <Button
               type="submit"
               disabled={isAnimating}
-              className="mt-4 w-full bg-primary text-white py-3 rounded hover:bg-secondary transition font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-4 w-full flex items-center justify-center bg-primary text-white py-3 rounded hover:bg-secondary transition font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isAnimating ? 'Sending...' : 'Send RSVP'}
-            </button>
+            </Button>
           </form>
         </div>
       )}
