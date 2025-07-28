@@ -8,7 +8,7 @@ export default function AttirePage() {
   useScrollToNext({ nextPage: '/location' });
 
   return (
-    <section className="animate-fade-in max-w-2xl mx-auto px-4 py-16 text-center flex flex-col items-center justify-center gap-14">
+    <section className="animate-fade-in max-w-2xl mx-auto px-4 py-16 text-center flex flex-col items-center justify-around gap-14">
       <h1 className="text-5xl font-honeymoon text-primary font-bold">Attire</h1>
 
       <p className="text-lg font-lucy text-foreground">
@@ -17,7 +17,7 @@ export default function AttirePage() {
         elegance to the evening.
       </p>
 
-      <Button className="mt-[50%]">
+      <Button>
         <Link href="/gallery">Continue</Link>
       </Button>
     </section>

@@ -1,11 +1,10 @@
 import Button from '@/components/base/button';
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function LocationPage() {
   return (
-    <section className="max-w-3xl mx-auto px-4 py-16 text-center font-lucy text-foreground">
-      <h1 className="text-5xl font-honeymoon text-primary mb-10">Location</h1>
+    <section className="max-w-3xl mx-auto px-4 flex flex-col items-center justify-around text-center font-lucy text-foreground">
+      <h1 className="text-5xl font-honeymoon text-primary">Location</h1>
 
       <div className="space-y-6 text-lg">
         <p>
@@ -40,7 +39,7 @@ export default function LocationPage() {
         <p className="text-sm text-secondary">Click the map above to open directions in Google Maps 📍</p>
       </div>
 
-      <Button className="mx-auto mt-[10%]">
+      <Button className="mx-auto mt-14">
         <Link href="/rsvp">Join the Celebration</Link>
       </Button>
     </section>

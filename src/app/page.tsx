@@ -13,7 +13,7 @@ export default function Home() {
   useScrollToNext({ nextPage: '/about' });
 
   return (
-    <section className="h-[calc(100vh-120px)] animate-fade-in flex items-center justify-center px-4">
+    <section className="animate-fade-in flex items-center justify-center px-4">
       <div className="text-center max-w-2xl space-y-6 flex flex-col items-center">
         <Image src={LogoImg} alt="Logo" width={300} height={300} />
 
