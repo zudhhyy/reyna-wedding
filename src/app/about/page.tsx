@@ -8,9 +8,8 @@ import ReynaImg from '@/assets/images/potrait/reyna.webp';
 import WasiqImg from '@/assets/images/potrait/wasiq.webp';
 
 export default function AboutPage() {
-
   return (
-    <section className="animate-fade-in h-[calc(100vh-120px)] max-w-3xl mx-auto px-4 py-16 text-center space-y-10">
+    <section className="animate-fade-in flex flex-col items-center justify-around max-w-3xl mx-auto px-4 py-16 text-center space-y-10">
       <h1 className="text-5xl font-honeymoon text-primary">About the Couple</h1>
 
       <div className="flex items-center justify-center gap-4">
@@ -39,7 +38,7 @@ export default function AboutPage() {
           <span className="text-secondary font-semibold">Ratu S. Hadhiman</span>.
         </p>
 
-        <Button className="mt-[25%]">
+        <Button>
           <Link href="/attire">Continue</Link>
         </Button>
       </div>

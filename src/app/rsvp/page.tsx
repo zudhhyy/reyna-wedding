@@ -7,10 +7,14 @@ import { useState } from 'react';
 export default function RSVPPage() {
   const [submitted, setSubmitted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    attendance: 'yes',
+    phone: '',
+    message: ''
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: send to backend
+  const handleNext = () => {
     setIsAnimating(true);
     setTimeout(() => {
       setSubmitted(true);
@@ -18,8 +22,40 @@ export default function RSVPPage() {
     }, 500);
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        handleNext();
+      } else {
+        console.error('Failed to submit RSVP');
+        // You could add error handling here
+      }
+    } catch (error) {
+      console.error('Error submitting RSVP:', error);
+      // You could add error handling here
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   return (
-    <section className="animate-fade-in max-w-xl mx-auto px-4 py-16 font-lucy text-foreground">
+    <section className="animate-fade-in max-w-xl mx-auto px-4 py-16 flex flex-col justify-around font-lucy text-foreground">
       {submitted ? (
         <div className="max-w-2xl mx-auto px-4 py- text-center font-lucy text-foreground">
           <h1 className="text-5xl font-honeymoon text-primary mb-10">Thank You</h1>
@@ -47,13 +83,10 @@ export default function RSVPPage() {
           </Button>
         </div>
       ) : (
-        <>
+        <div className={`space-y-6 transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95 transform' : 'opacity-100 scale-100'}`}>
           <h1 className="text-5xl font-honeymoon text-primary text-center mb-10">RSVP</h1>
 
-          <form
-            onSubmit={handleSubmit}
-            className={`space-y-6 transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95 transform' : 'opacity-100 scale-100'}`}
-          >
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block mb-1 text-secondary" htmlFor="name">
                 Name
@@ -61,9 +94,29 @@ export default function RSVPPage() {
               <input
                 type="text"
                 id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
                 required
                 className="w-full px-4 py-2 rounded border border-tertiary bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
               />
+            </div>
+
+            <div>
+              <label className="block mb-1 text-secondary" htmlFor="attendance">
+                Will you attend our wedding?
+              </label>
+              <select
+                id="attendance"
+                name="attendance"
+                value={formData.attendance}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded border border-tertiary bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
+              >
+                <option value="yes">Yes, I will attend</option>
+                <option value="no">No, I cannot attend</option>
+                <option value="maybe">Maybe, I&apos;m not sure yet</option>
+              </select>
             </div>
 
             <div>
@@ -73,6 +126,9 @@ export default function RSVPPage() {
               <input
                 type="tel"
                 id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
                 required
                 className="w-full px-4 py-2 rounded border border-tertiary bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
               />
@@ -84,6 +140,9 @@ export default function RSVPPage() {
               </label>
               <textarea
                 id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleInputChange}
                 rows={4}
                 className="w-full px-4 py-2 rounded border border-tertiary bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
               ></textarea>
@@ -97,7 +156,7 @@ export default function RSVPPage() {
               {isAnimating ? 'Sending...' : 'Send RSVP'}
             </button>
           </form>
-        </>
+        </div>
       )}
     </section>
   );

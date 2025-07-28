@@ -5,8 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-const photos = Array.from({ length: 10 }, (_, i) => ({
-  src: `/images/gallery/${i + 1}.webp`,
+const photos = Array.from({ length: 9 }, (_, i) => ({
+  src: `/images/gallery/${i + 1}.jpeg`,
   alt: `Photo ${i + 1}`,
 }));
 
@@ -54,7 +54,7 @@ export default function GalleryPage() {
   };
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-16 font-lucy text-foreground">
+    <section className="max-w-6xl mx-auto px-4 py-14 font-lucy text-foreground">
       <h1 className="text-5xl font-honeymoon text-primary text-center mb-12">Gallery</h1>
 
       <div className="columns-2 sm:columns-3 md:columns-4 gap-4">
@@ -83,7 +83,7 @@ export default function GalleryPage() {
         ))}
       </div>
 
-      <Button className="mt-[10%] mx-auto">
+      <Button className="mt-14 mx-auto">
         <Link href="/registry">Continue</Link>
       </Button>
 
